@@ -1,0 +1,10 @@
+TODO
+- Reporting utiility for hidden objects and customer requested custom reports, leveraging @readOnly annotation
+--
+
+- Analysis utility for any object data volume/ field selectivity.  
+-- Determine the selectivity for any queryable field on any queryable object
+
+- Custom component that brings email functionality to any object that can be displayed in standard UI or VF page.
+-- Some objects do not support email related lists.  
+-- "Tweet", "facebook" feeds for any object.  
