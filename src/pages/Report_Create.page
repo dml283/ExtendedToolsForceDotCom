@@ -1,0 +1,8 @@
+<apex:page controller="ReportingBasics">
+    <apex:form >
+    <apex:outputText >Object:</apex:outputText>
+        <apex:selectList value="{!SelectedObject}" multiselect="false" size="1">
+            <apex:selectOptions value="{!GlobalDescribeSelect}"/>
+        </apex:selectList>
+    </apex:form>
+</apex:page>
