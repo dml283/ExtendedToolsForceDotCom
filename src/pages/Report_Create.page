@@ -1,8 +1,16 @@
-<apex:page controller="ReportingBasics">
+<apex:page controller="Report_Create_Controller">
     <apex:form >
-    <apex:outputText >Object:</apex:outputText>
-        <apex:selectList value="{!SelectedObject}" multiselect="false" size="1">
+        <apex:outputText >Object:</apex:outputText>
+        <apex:selectList value="{!SelectedObject}" multiselect="false" size="1" >
             <apex:selectOptions value="{!GlobalDescribeSelect}"/>
+            <apex:actionSupport event="onchange" rerender="FieldSelectOutPanel"/>
         </apex:selectList>
+        <br/>
+        <apex:outputPanel id="FieldSelectOutPanel">
+            <apex:outputText >Fields:</apex:outputText>
+            <apex:selectList value="{!SelectedFields}" multiselect="true" size="6">
+                <apex:selectOptions value="{!FieldResultSelect}"/>
+            </apex:selectList>
+        </apex:outputPanel>        
     </apex:form>
 </apex:page>
