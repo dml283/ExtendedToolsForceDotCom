@@ -11,7 +11,7 @@ Map<String, Schema.SObjectField> gfd;
 
 Public List<String> SelectedFields {get; set;}
 
-/* 
+/*
 
 1. Generate a list of the sObjects in your organization
     ***public getter provides them to the vforcepage
@@ -24,7 +24,7 @@ public List<SelectOption> getGlobalDescribeSelect(){
     }
     
     List<string> gd_list = new List<string>(gd.keyset());
-    List<SelectOption> options = new List<SelectOption>();    
+    List<SelectOption> options = new List<SelectOption>();
     For(String s : gd_list){
         options.add(new SelectOption(s,s));
     }
@@ -50,8 +50,8 @@ public List<SelectOption> getFieldResultSelect(){
         SelectedObjectDescribe = SelectedObjectType.getDescribe();
         gfd = SelectedObjectDescribe.fields.getMap();
         for(String s:gfd.keyset()){
-            options.add(new SelectOption(s,s));        
-        }            
+            options.add(new SelectOption(s,s));
+        }
     }
     return options;
 }
@@ -68,7 +68,7 @@ public List<SelectOption> getFieldResultSelect(){
 /*
 
 4. Generate a map of field tokens for the sObject (see Accessing All Field Describe Results for an sObject)
-    ***Send these fields out in a public list 
+    ***Send these fields out in a public list
     
 */
 

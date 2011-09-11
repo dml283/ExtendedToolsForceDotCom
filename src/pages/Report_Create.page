@@ -11,6 +11,6 @@
             <apex:selectList value="{!SelectedFields}" multiselect="true" size="6">
                 <apex:selectOptions value="{!FieldResultSelect}"/>
             </apex:selectList>
-        </apex:outputPanel>        
+        </apex:outputPanel>
     </apex:form>
 </apex:page>

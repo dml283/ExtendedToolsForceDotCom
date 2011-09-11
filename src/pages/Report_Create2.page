@@ -1,0 +1,96 @@
+<apex:page controller="ReportingBasics2" sidebar="false" showHeader="false">
+    
+    <style type="text/css">
+ 		.inactive {font-style:italic;color:red;disabled:disabled;}
+ 		.panelrows {vertical-align: top;}
+ 		.fieldcolumns {vertical-align: top;}
+ 		.panelcolumns {width:16%;}
+ 		.navigationTop {position:absolute;right:5px;top:5px;}
+	</style>
+	<apex:outputLink value="/home/home.jsp" id="home" styleClass="navigationTop">goto hometab</apex:outputLink>
+    <apex:pageBlock title="Query Engine">
+    <apex:form > 
+    	<apex:actionFunction name="RerenderObjFldList" action="{!getObjectDetails}" reRender="ObjectFieldList, DirectObjectChildrenList, RelatedObjectFieldList, childObjectFieldList, SoqlQuery, results" status="reRenderStatus">
+    		<apex:param name="currentLookupField" assignTo="{!currentLookupField}" value=""/>
+            <apex:param name="showRelatedObjectFieldList" assignTo="{!showRelatedObjectFieldList}" value="False"/>
+        </apex:actionFunction>
+		<apex:actionFunction name="RerenderSoqlQuery" reRender="SoqlQuery, results, ObjectFieldList" status="reRenderStatus"/>	    
+	    
+	    
+	    
+	    <div style="height:500px;">
+	    <apex:panelgrid columns="6" rowClasses="panelrows" columnClasses="panelcolumns" style="table-layout:fixed;">
+		    
+		    <apex:panelgroup id="ObjectList" >
+		        <apex:outputText >Object</apex:outputText><br/>
+		            <apex:selectList value="{!SelectedObject}" multiselect="false" size="1" onchange="RerenderObjFldList()" >
+		                <apex:selectOptions value="{!GlobalDescribeSelect}"/>
+		            </apex:selectList>
+		            <apex:actionStatus id="reRenderStatus" startText=" (refreshing...)"/> 
+		 	 </apex:panelgroup>
+		 	 			
+			<apex:panelgroup id="ObjectFieldList" >
+                <div style="height:500px;overflow:scroll;">
+                <apex:pageblockTable value="{!objDetails.Fields}" var="field" >
+                	<apex:column style="vertical-align: top;"><apex:inputCheckBox value="{!field.selected}" onchange="RerenderSoqlQuery()"/></apex:column>
+                	<apex:column value="{!field.fieldName}" headervalue="Fields" style="vertical-align: top;"/>
+                	<apex:column headervalue="Lookup Info" style="vertical-align: top;">
+                		<apex:commandLink action="{!assignCurrentLookupField}" value="{!field.referenceObjectName}" rendered="{!field.isReferenceField}" rerender="ObjectFieldList, RelatedObjectFieldList, childObjectFieldList, SoqlQuery, results">		                		
+                			<apex:param name="currentLookupField" assignTo="{!currentLookupField}" value="{!field.fieldName}"/>
+                			<apex:param name="showRelatedObjectFieldList" assignTo="{!showRelatedObjectFieldList}" value="True"/>
+    					</apex:commandLink>
+    					({!field.referenceFieldsQueried})
+                	</apex:column>		                		
+                </apex:pageblockTable>
+                </div>
+		    </apex:panelgroup>
+		    
+		    <apex:panelgroup id="RelatedObjectFieldList" >
+		    	<apex:outputPanel id="referenceFields" rendered="{!showRelatedObjectFieldList}">
+         			<div style="height:500px;overflow:scroll;">
+         			<apex:pageblockTable value="{!currentLookupObject.Fields}" var="rfObjField" >
+         				<apex:column ><apex:inputCheckBox value="{!rfObjField.selected}" onchange="RerenderSoqlQuery()"/></apex:column>
+         				<apex:column value="{!rfObjField.fieldName}" headervalue="Fields"/>
+         			</apex:pageblockTable>
+         			 </div>
+		        </apex:outputPanel>
+		    </apex:panelgroup> 	 
+    	    
+    	    
+    	    <apex:panelgroup id="childObjectFieldList" >
+                <div style="height:500px;overflow:scroll;">
+                <apex:pageblockTable value="{!objDetails.childObjects}" var="childObject" >
+                	<apex:column style="vertical-align: top;"><apex:inputCheckBox value="{!childObject.selected}" onchange="RerenderSoqlQuery()"/></apex:column>
+                	<apex:column value="{!childObject.ObjectName}" headervalue="Child Objects" style="vertical-align: top;"/>        		
+                </apex:pageblockTable>
+                </div>
+		    </apex:panelgroup>
+    	</apex:panelgrid>
+    	</div>
+    
+   
+    
+    <apex:outputPanel id="results" styleclass="inactive">
+    	<apex:outputpanel id="SoqlQuery" layout="block">
+		        	<apex:outputText >Soql Query:</apex:outputText><br/>
+		                <apex:outputText value="{!objDetails.soqlQuery}"  /> <br/>
+		                <apex:commandButton action="{!Query}" value="Query" rerender="results" status="reRenderStatus"/>
+		    	</apex:outputpanel> 
+    	<br/>
+    	Base Object fields<br/>
+    	<apex:repeat value="{!objDetails.InnerSelectedFields}" var="myfields">
+    		{!myfields}
+    	</apex:repeat>
+    	<br/>
+    	<br/>
+    	BaseObject Child objects<br/>
+    	<apex:repeat value="{!objDetails.ChildObjectsAndInnerFields}" var="myfields">
+    		{!myfields}
+    	</apex:repeat>
+    	
+    	
+    </apex:outputPanel>
+     </apex:form>
+    </apex:pageBlock>
+    
+</apex:page>
